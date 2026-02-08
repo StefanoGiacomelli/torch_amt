@@ -165,7 +165,7 @@ print(f"Input: {audio.shape} → Output: {logits.shape}")
 ## 📖 Documentation
 
 - **API Reference**: See docstrings (comprehensive documentation with equations and examples)
-- **Documentation**: Coming soon on Read the Docs
+- **Documentation**: https://torch-amt.readthedocs.io/en/latest/index.html
 - 🤝 **Contributing**: See [DEV](./dev/) templates
 
 ---
