@@ -1,6 +1,6 @@
 # 🔊 torch_amt - PyTorch Auditory Modeling Toolbox
 
-[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0) [![Python 3.14+](https://img.shields.io/badge/python-3.14+-blue.svg)](https://www.python.org/downloads/) [![PyTorch 2.0+](https://img.shields.io/badge/PyTorch-2.0+-ee4c2c.svg)](https://pytorch.org/)
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0) [![Python 3.14+](https://img.shields.io/badge/python-3.14+-blue.svg)](https://www.python.org/downloads/) [![PyTorch 2.0+](https://img.shields.io/badge/PyTorch-2.0+-ee4c2c.svg)](https://pytorch.org/) [![PyPI version](https://badge.fury.io/py/torch-amt.svg)](https://badge.fury.io/py/torch-amt) [![Documentation Status](https://readthedocs.org/projects/torch-amt/badge/?version=latest)](https://torch-amt.readthedocs.io/en/latest/?badge=latest)
 
 <p align="center">
   <img src="dev/AMT_front_image.png" alt="torch_amt - PyTorch Auditory Modeling Toolbox" width="800">
