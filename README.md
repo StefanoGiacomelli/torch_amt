@@ -155,8 +155,8 @@ print(f"Input: {audio.shape} → Output: {logits.shape}")
 |-------|------|--------------|-----------|
 | **Dau1997** | 1997 | Adaptation loops, modulation filterbank | AM detection, temporal processing |
 | **Glasberg2002** | 2002 | Specific loudness, temporal integration | Loudness perception, hearing aids |
-| **King2019** | 2019 | Broken-stick compression, FM/AM analysis | FM masking, modulation interactions |
 | **Moore2016** | 2016 | Binaural processing, spatial smoothing | Binaural loudness, spatial hearing |
+| **King2019** | 2019 | Broken-stick compression, FM/AM analysis | FM masking, modulation interactions |
 | **Osses2021** | 2021 | Extended temporal integration | Speech perception, temporal resolution |
 | **Paulick2024** | 2024 | Physiological IHC, CASP framework | Physiological modeling, cochlear implants |
 
@@ -166,13 +166,13 @@ print(f"Input: {audio.shape} → Output: {logits.shape}")
 
 - **API Reference**: See docstrings (comprehensive documentation with equations and examples)
 - **Documentation**: Coming soon on Read the Docs
-- 🤝 **Contributing**: See [CONTRIBUTING.md](CONTRIBUTING.md) and [DEV](./torch_amt/dev/) templates
+- 🤝 **Contributing**: See [DEV](./dev/) templates
 
 ---
 
 ## 📊 Performance
 
-Placeholder table w. Components runtime analysis forward over 10 runs, and final forward+backward (on CPU, GPU, MPS)
+TODO: Placeholder table w. Components runtime analysis forward over 10 runs, and final forward+backward (on CPU, GPU, MPS)
 
 ---
 
