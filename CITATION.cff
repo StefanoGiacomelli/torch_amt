@@ -1,0 +1,44 @@
+cff-version: 1.2.0
+title: "torch_amt: PyTorch Auditory Modeling Toolbox"
+message: "If you use this software, please cite it using the metadata from this file."
+type: software
+authors:
+  - family-names: "Giacomelli"
+    given-names: "Stefano"
+    email: "stefano.giacomelli@graduate.univaq.it"
+    affiliation: "DISIM Department, University of L'Aquila"
+    orcid: "https://orcid.org/0009-0009-0438-1748"
+repository-code: "https://github.com/StefanoGiacomelli/torch_amt"
+url: "https://github.com/StefanoGiacomelli/torch_amt"
+abstract: >
+  torch_amt is a comprehensive PyTorch implementation of computational auditory 
+  models from the Auditory Modeling Toolbox (AMT). It provides Hardware-accelerated, 
+  differentiable implementations of state-of-the-art psychoacoustic models and 
+  their constituent building blocks, enabling gradient-based optimization and 
+  integration with audio deep learning pipelines.
+keywords:
+  - auditory modeling
+  - psychoacoustics
+  - computational neuroscience
+  - pytorch
+  - deep learning
+  - neural networks
+  - hearing
+  - sound perception
+license: GPL-3.0-or-later
+version: 0.1.0
+date-released: "2026-02-07"
+references:
+  - type: article
+    authors:
+      - family-names: "Majdak"
+        given-names: "Piotr"
+      - family-names: "Hollomey"
+        given-names: "Clara"
+      - family-names: "Baumgartner"
+        given-names: "Robert"
+    title: "AMT 1.x: A toolbox for reproducible research in auditory modeling"
+    journal: "Acta Acustica"
+    volume: 6
+    year: 2022
+    doi: "10.1051/aacus/2022011"
