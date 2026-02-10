@@ -71,13 +71,14 @@ their constituent building blocks.
 
 **Version History:**
     - 0.1.0 (2026-02): Initial release
+    - 0.2.0 (2026-03): Updated documentation and added new features
 """
 
 # ============================================================================
 # Package Metadata
 # ============================================================================
 
-__version__ = "0.1.0"
+__version__ = "0.2.0"
 __author__ = "Stefano Giacomelli"
 __email__ = "stefano.giacomelli@graduate.univaq.it"
 __license__ = "GPL-3.0-or-later"
