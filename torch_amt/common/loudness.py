@@ -289,7 +289,7 @@ class BrokenStickCompression(nn.Module):
             knee_db = self.knee_db_param.to(device=device, dtype=dtype)
             knee = 10.0 ** ((knee_db - self.dboffset) / 20.0)
             # For learnable, compute knee_factor on the fly
-            knee_factor = knee ** (1.0 - exponent)
+            knee_factor = knee ** (1.0 - self.exponent)
         else:
             knee = self.knee.to(device=device, dtype=dtype)
             # OPTIMIZATION: Use pre-calculated knee_factor

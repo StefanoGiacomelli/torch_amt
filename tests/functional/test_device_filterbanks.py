@@ -404,6 +404,58 @@ def test_drnl_filterbank(device, learnable):
 
 
 # ================================================================================================
+# Test: FastDRNLFilterbank
+# ================================================================================================
+
+@pytest.mark.parametrize("device", get_available_devices())
+@pytest.mark.parametrize("learnable", [False, True])
+def test_fast_drnl_filterbank(device, learnable):
+    """Test FastDRNLFilterbank on specified device with learnable parameters."""
+    from torch_amt.common.filterbanks import FastDRNLFilterbank
+    
+    print(f"\n{'='*80}")
+    print(f"TEST: FastDRNLFilterbank - Device: {device.upper()}, Learnable: {learnable}")
+    print(f"{'='*80}\n")
+    
+    # Initialization with default parameters from filterbanks.py
+    # MPS doesn't support float64, use float32
+    fs = 16000
+    ir_length = 4096  # Default impulse response length
+    dtype = torch.float32 if device == 'mps' else torch.float64
+    fc = create_test_fc(device, n_channels=5)
+    filterbank = FastDRNLFilterbank(fc=fc, fs=fs, ir_length=ir_length, learnable=learnable, dtype=dtype)
+    filterbank = filterbank.to(device)
+    
+    print(f"✓ Initialization successful")
+    print(f"  Module: {filterbank}")
+    print(f"  extra_repr: {filterbank.extra_repr()}")
+    
+    # Parameters
+    n_params = sum(p.numel() for p in filterbank.parameters())
+    param_names = [name for name, _ in filterbank.named_parameters()]
+    print(f"  Parameters: {n_params} total")
+    print(f"  IR length: {filterbank.ir_length} samples")
+    
+    # Forward pass - single
+    audio_single = create_test_audio(device, batch_size=1, fs=fs)
+    print(f"  Input device: {audio_single.device}")
+    avg_time_single = time_forward_pass(filterbank, audio_single, device=device.split(':')[0])
+    output_single = filterbank(audio_single)
+    print(f"  Output device: {output_single.device}")
+    assert output_single.device.type == device.split(':')[0]
+    print(f"✓ Forward single: {audio_single.shape} -> {output_single.shape} ({avg_time_single:.3f} ms avg)")
+    
+    # Forward pass - batch
+    audio_batch = create_test_audio(device, batch_size=4, fs=fs)
+    avg_time_batch = time_forward_pass(filterbank, audio_batch, device=device.split(':')[0])
+    output_batch = filterbank(audio_batch)
+    assert output_batch.device.type == device.split(':')[0]
+    print(f"✓ Forward batch:  {audio_batch.shape} -> {output_batch.shape} ({avg_time_batch:.3f} ms avg)")
+    
+    print(f"\n✓ FastDRNLFilterbank passed on {device.upper()} (learnable={learnable})\n")
+
+
+# ================================================================================================
 # Test: MultiResolutionFFT
 # ================================================================================================
 
@@ -643,6 +695,7 @@ def main():
         ("GammatoneFilterbank", test_gammatone_filterbank),
         ("ERBIntegration", test_erb_integration),
         ("DRNLFilterbank", test_drnl_filterbank),
+        ("FastDRNLFilterbank", test_fast_drnl_filterbank),
         ("MultiResolutionFFT", test_multi_resolution_fft),
         ("Moore2016Spectrum", test_moore2016_spectrum),
         ("ExcitationPattern", test_excitation_pattern),

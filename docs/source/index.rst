@@ -255,11 +255,24 @@ Also consider citing the original AMT paper:
 Contact
 -------
 
-**Author:** Stefano Giacomelli
+**Stefano Giacomelli**  
+ICT - Ph.D. Candidate  
+Department of Engineering, Information Science & Mathematics (DISIM dpt.)
+University of L'Aquila, Italy
 
-**Affiliation:** Ph.D. Candidate @ DISIM Department, University of L'Aquila
+.. figure:: https://phdict.disim.univaq.it/wp-content/uploads/2024/06/logo-univaq-disim-2-2-768x283.png
+   :alt: DISIM - University of L'Aquila
+   :align: left
+   :width: 400px
+   :height: 150px
 
-**Email:** stefano.giacomelli@graduate.univaq.it
+📧 Email: stefano.giacomelli@graduate.univaq.it  
+🔗 GitHub: https://github.com/StefanoGiacomelli 
+🆔 ORCID: https://orcid.org/0009-0009-0438-1748 
+🎓 Scholar: https://scholar.google.com/citations?user=l-n0hl4AAAAJ&hl=it  
+💼 LinkedIn: https://www.linkedin.com/in/stefano-giacomelli-811654135
+
+*This project is funded under the Italian National Ministry of University and Research, for the Italian National Recovery and Resilience Plan (NRRP) "Methods of Computational Auditory Scene Analysis and Synthesis supporting eXtended and Immersive Reality Services"*
 
 License
 -------

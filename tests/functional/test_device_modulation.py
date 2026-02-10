@@ -598,6 +598,650 @@ def test_modfb_batch_consistency(device):
 
 
 # ================================================================================================
+# Test: FastModulationFilterbank - Default Parameters
+# ================================================================================================
+
+@pytest.mark.parametrize("device", get_available_devices())
+@pytest.mark.parametrize("learnable", [False, True])
+def test_fast_modfb_default(device, learnable):
+    """Test FastModulationFilterbank with default parameters on specified device."""
+    from torch_amt.common.modulation import FastModulationFilterbank
+    
+    print(f"\n{'='*80}")
+    print(f"TEST: FastModulationFilterbank (default) - Device: {device.upper()}, Learnable: {learnable}")
+    print(f"{'='*80}\n")
+    
+    # Initialization with default parameters
+    fs = 16000
+    fc = create_test_fc(device, n_channels=10)  # Use fewer channels for speed
+    modfb = FastModulationFilterbank(fs=fs, fc=fc, learnable=learnable)
+    modfb = modfb.to(device)
+    
+    print(f"✓ Initialization successful")
+    print(f"  Module: {modfb}")
+    print(f"  extra_repr: {modfb.extra_repr()}")
+    
+    # Check parameters
+    n_params = sum(p.numel() for p in modfb.parameters())
+    param_names = [name for name, _ in modfb.named_parameters()]
+    print(f"  Parameters: {n_params} total")
+    if learnable:
+        print(f"  Learnable param names (first 3): {param_names[:3]}")
+    
+    # Verify attributes (inherited from ModulationFilterbank)
+    assert modfb.fs == fs
+    assert len(modfb.fc) == 10
+    print(f"  Verified: default parameters")
+    
+    # Forward pass - single
+    signal_single = create_test_signal(device, batch_size=1, n_channels=10, duration=0.1, fs=fs)
+    print(f"  Input device: {signal_single.device}")
+    
+    avg_time_single = time_forward_pass(modfb, signal_single, device=device.split(':')[0])
+    output_single = modfb(signal_single)
+    
+    # Verify output structure
+    assert isinstance(output_single, list)
+    assert len(output_single) == 10
+    print(f"✓ Forward single: {signal_single.shape} -> List[{len(output_single)}] ({avg_time_single:.3f} ms avg)")
+    print(f"  First channel output shape: {output_single[0].shape}")
+    
+    # Forward pass - batch
+    signal_batch = create_test_signal(device, batch_size=4, n_channels=10, duration=0.1, fs=fs)
+    avg_time_batch = time_forward_pass(modfb, signal_batch, device=device.split(':')[0])
+    output_batch = modfb(signal_batch)
+    
+    assert isinstance(output_batch, list)
+    assert len(output_batch) == 10
+    assert output_batch[0].shape[0] == 4  # Batch dimension
+    print(f"✓ Forward batch: {signal_batch.shape} -> List[{len(output_batch)}] ({avg_time_batch:.3f} ms avg)")
+    
+    print(f"\n{'='*80}\n")
+
+
+# ================================================================================================
+# Test: FastModulationFilterbank - Presets
+# ================================================================================================
+
+@pytest.mark.parametrize("device", get_available_devices())
+def test_fast_modfb_dau1997(device):
+    """Test FastModulationFilterbank with dau1997 preset."""
+    from torch_amt.common.modulation import FastModulationFilterbank
+    
+    print(f"\n{'='*80}")
+    print(f"TEST: FastModulationFilterbank (dau1997) - Device: {device.upper()}")
+    print(f"{'='*80}\n")
+    
+    fs = 16000
+    fc = create_test_fc(device, n_channels=10)
+    modfb = FastModulationFilterbank(fs=fs, fc=fc, preset='dau1997')
+    modfb = modfb.to(device)
+    
+    print(f"✓ Initialization successful")
+    assert modfb.preset == 'dau1997'
+    print(f"  Verified: preset='dau1997'")
+    
+    signal = create_test_signal(device, batch_size=2, n_channels=10, duration=0.1, fs=fs)
+    avg_time = time_forward_pass(modfb, signal, device=device.split(':')[0])
+    output = modfb(signal)
+    
+    assert isinstance(output, list)
+    print(f"✓ Forward: {signal.shape} -> List[{len(output)}] ({avg_time:.3f} ms avg)")
+    print(f"\n{'='*80}\n")
+
+
+@pytest.mark.parametrize("device", get_available_devices())
+def test_fast_modfb_jepsen2008(device):
+    """Test FastModulationFilterbank with jepsen2008 preset."""
+    from torch_amt.common.modulation import FastModulationFilterbank
+    
+    print(f"\n{'='*80}")
+    print(f"TEST: FastModulationFilterbank (jepsen2008) - Device: {device.upper()}")
+    print(f"{'='*80}\n")
+    
+    fs = 16000
+    fc = create_test_fc(device, n_channels=10)
+    modfb = FastModulationFilterbank(fs=fs, fc=fc, preset='jepsen2008')
+    modfb = modfb.to(device)
+    
+    print(f"✓ Initialization successful")
+    assert modfb.preset == 'jepsen2008'
+    print(f"  Verified: preset='jepsen2008'")
+    
+    signal = create_test_signal(device, batch_size=2, n_channels=10, duration=0.1, fs=fs)
+    avg_time = time_forward_pass(modfb, signal, device=device.split(':')[0])
+    output = modfb(signal)
+    
+    assert isinstance(output, list)
+    print(f"✓ Forward: {signal.shape} -> List[{len(output)}] ({avg_time:.3f} ms avg)")
+    print(f"\n{'='*80}\n")
+
+
+@pytest.mark.parametrize("device", get_available_devices())
+def test_fast_modfb_paulick2024(device):
+    """Test FastModulationFilterbank with paulick2024 preset."""
+    from torch_amt.common.modulation import FastModulationFilterbank
+    
+    print(f"\n{'='*80}")
+    print(f"TEST: FastModulationFilterbank (paulick2024) - Device: {device.upper()}")
+    print(f"{'='*80}\n")
+    
+    fs = 16000
+    fc = create_test_fc(device, n_channels=10)
+    modfb = FastModulationFilterbank(fs=fs, fc=fc, preset='paulick2024')
+    modfb = modfb.to(device)
+    
+    print(f"✓ Initialization successful")
+    assert modfb.preset == 'paulick2024'
+    print(f"  Verified: preset='paulick2024'")
+    
+    signal = create_test_signal(device, batch_size=2, n_channels=10, duration=0.1, fs=fs)
+    avg_time = time_forward_pass(modfb, signal, device=device.split(':')[0])
+    output = modfb(signal)
+    
+    assert isinstance(output, list)
+    print(f"✓ Forward: {signal.shape} -> List[{len(output)}] ({avg_time:.3f} ms avg)")
+    print(f"\n{'='*80}\n")
+
+
+@pytest.mark.parametrize("device", get_available_devices())
+@pytest.mark.parametrize("filter_type", ['efilt', 'butterworth'])
+def test_fast_modfb_filter_types(device, filter_type):
+    """Test FastModulationFilterbank with different filter types."""
+    from torch_amt.common.modulation import FastModulationFilterbank
+    
+    print(f"\n{'='*80}")
+    print(f"TEST: FastModulationFilterbank (filter_type={filter_type}) - Device: {device.upper()}")
+    print(f"{'='*80}\n")
+    
+    fs = 16000
+    fc = create_test_fc(device, n_channels=10)
+    modfb = FastModulationFilterbank(fs=fs, fc=fc, filter_type=filter_type)
+    modfb = modfb.to(device)
+    
+    print(f"✓ Initialization successful")
+    assert modfb.filter_type == filter_type
+    print(f"  Verified: filter_type='{filter_type}'")
+    
+    signal = create_test_signal(device, batch_size=2, n_channels=10, duration=0.1, fs=fs)
+    avg_time = time_forward_pass(modfb, signal, device=device.split(':')[0])
+    output = modfb(signal)
+    
+    assert isinstance(output, list)
+    print(f"✓ Forward: {signal.shape} -> List[{len(output)}] ({avg_time:.3f} ms avg)")
+    print(f"\n{'='*80}\n")
+
+
+@pytest.mark.parametrize("device", get_available_devices())
+def test_fast_modfb_learnable(device):
+    """Test FastModulationFilterbank with learnable parameters."""
+    from torch_amt.common.modulation import FastModulationFilterbank
+    
+    print(f"\n{'='*80}")
+    print(f"TEST: FastModulationFilterbank (learnable) - Device: {device.upper()}")
+    print(f"{'='*80}\n")
+    
+    fs = 16000
+    fc = create_test_fc(device, n_channels=10)
+    modfb = FastModulationFilterbank(fs=fs, fc=fc, learnable=True)
+    modfb = modfb.to(device)
+    
+    print(f"✓ Initialization successful")
+    
+    # Count parameters
+    n_params_total = sum(p.numel() for p in modfb.parameters())
+    n_params_learnable = sum(p.numel() for p in modfb.parameters() if p.requires_grad)
+    
+    print(f"  Total parameters: {n_params_total}")
+    print(f"  Learnable parameters: {n_params_learnable}")
+    assert n_params_learnable > 0, "Should have learnable parameters"
+    
+    signal = create_test_signal(device, batch_size=2, n_channels=10, duration=0.1, fs=fs)
+    output = modfb(signal)
+    
+    assert isinstance(output, list)
+    print(f"✓ Forward: {signal.shape} -> List[{len(output)}]")
+    print(f"\n{'='*80}\n")
+
+
+@pytest.mark.parametrize("device", get_available_devices())
+def test_fast_modfb_mfc_generation(device):
+    """Test FastModulationFilterbank modulation center frequency generation."""
+    from torch_amt.common.modulation import FastModulationFilterbank
+    
+    print(f"\n{'='*80}")
+    print(f"TEST: FastModulationFilterbank (MFC generation) - Device: {device.upper()}")
+    print(f"{'='*80}\n")
+    
+    fs = 16000
+    fc = create_test_fc(device, n_channels=5)
+    modfb = FastModulationFilterbank(fs=fs, fc=fc)
+    modfb = modfb.to(device)
+    
+    print(f"✓ Initialization successful")
+    print(f"  Number of MFC: {len(modfb.mfc)}")
+    print(f"  MFC range: [{modfb.mfc[0]:.2f}, {modfb.mfc[-1]:.2f}] Hz")
+    
+    # Verify MFC ordering
+    for i in range(len(modfb.mfc) - 1):
+        assert modfb.mfc[i] < modfb.mfc[i+1], f"MFC not monotonically increasing at index {i}"
+    
+    print(f"  Verified: MFC monotonically increasing")
+    print(f"\n{'='*80}\n")
+
+
+@pytest.mark.parametrize("device", get_available_devices())
+def test_fast_modfb_device_transfer(device):
+    """Test FastModulationFilterbank device transfer."""
+    from torch_amt.common.modulation import FastModulationFilterbank
+    
+    print(f"\n{'='*80}")
+    print(f"TEST: FastModulationFilterbank (device transfer) - Device: {device.upper()}")
+    print(f"{'='*80}\n")
+    
+    fs = 16000
+    fc = create_test_fc('cpu', n_channels=10)
+    modfb = FastModulationFilterbank(fs=fs, fc=fc)
+    
+    # Transfer to target device
+    modfb = modfb.to(device)
+    
+    signal = create_test_signal(device, batch_size=2, n_channels=10, duration=0.1, fs=fs)
+    output = modfb(signal)
+    
+    assert isinstance(output, list)
+    assert output[0].device.type == device.split(':')[0]
+    
+    print(f"✓ Device transfer successful: cpu -> {device}")
+    print(f"✓ Forward: {signal.shape} -> List[{len(output)}]")
+    print(f"\n{'='*80}\n")
+
+
+@pytest.mark.parametrize("device", get_available_devices())
+def test_fast_modfb_batch_consistency(device):
+    """Test FastModulationFilterbank batch consistency."""
+    from torch_amt.common.modulation import FastModulationFilterbank
+    
+    print(f"\n{'='*80}")
+    print(f"TEST: FastModulationFilterbank (batch consistency) - Device: {device.upper()}")
+    print(f"{'='*80}\n")
+    
+    fs = 16000
+    fc = create_test_fc(device, n_channels=10)
+    modfb = FastModulationFilterbank(fs=fs, fc=fc)
+    modfb = modfb.to(device)
+    
+    # Create batch of identical signals
+    signal_single = create_test_signal(device, batch_size=1, n_channels=10, duration=0.1, fs=fs)
+    signal_batch = signal_single.repeat(4, 1, 1)
+    
+    with torch.no_grad():
+        output_single = modfb(signal_single)
+        output_batch = modfb(signal_batch)
+    
+    # Check batch dimension
+    assert output_batch[0].shape[0] == 4
+    
+    # Check consistency (first batch element should match single)
+    for i in range(len(output_single)):
+        diff = (output_batch[i][0] - output_single[i][0]).abs().max()
+        assert diff < 1e-5, f"Batch inconsistency at channel {i}: max diff = {diff}"
+    
+    print(f"✓ Batch processing consistent with single processing")
+    print(f"\n{'='*80}\n")
+
+
+# ================================================================================================
+# Test: King2019ModulationFilterbank - Default Parameters
+# ================================================================================================
+
+@pytest.mark.parametrize("device", get_available_devices())
+@pytest.mark.parametrize("learnable", [False, True])
+def test_king2019_modfb_default(device, learnable):
+    """Test King2019ModulationFilterbank with default parameters on specified device."""
+    from torch_amt.common.modulation import King2019ModulationFilterbank
+    
+    print(f"\n{'='*80}")
+    print(f"TEST: King2019ModulationFilterbank (default) - Device: {device.upper()}, Learnable: {learnable}")
+    print(f"{'='*80}\n")
+    
+    # Initialization with default parameters
+    fs = 16000
+    modfb = King2019ModulationFilterbank(fs=fs, mflow=2.0, mfhigh=150.0, qfactor=1.0, learnable=learnable)
+    modfb = modfb.to(device)
+    
+    print(f"✓ Initialization successful")
+    print(f"  Module: {modfb}")
+    
+    # Check parameters
+    n_params = sum(p.numel() for p in modfb.parameters())
+    param_names = [name for name, _ in modfb.named_parameters()]
+    print(f"  Parameters: {n_params} total")
+    if learnable:
+        print(f"  Learnable param names (first 3): {param_names[:3] if len(param_names) >= 3 else param_names}")
+    
+    # Verify attributes
+    assert modfb.fs == fs
+    print(f"  Number of modulation filters: {modfb.num_filters}")
+    print(f"  MFC range: [{modfb.mfc[0]:.2f}, {modfb.mfc[-1]:.2f}] Hz")
+    
+    # Forward pass - single
+    signal_single = create_test_signal(device, batch_size=1, n_channels=10, duration=0.1, fs=fs)
+    print(f"  Input device: {signal_single.device}")
+    
+    avg_time_single = time_forward_pass(modfb, signal_single, device=device.split(':')[0])
+    output_single = modfb(signal_single)
+    
+    # Output shape: (B, C, M, T)
+    expected_shape = (1, 10, modfb.num_filters, signal_single.shape[-1])
+    assert output_single.shape == expected_shape, f"Expected {expected_shape}, got {output_single.shape}"
+    print(f"✓ Forward single: {signal_single.shape} -> {output_single.shape} ({avg_time_single:.3f} ms avg)")
+    
+    # Forward pass - batch
+    signal_batch = create_test_signal(device, batch_size=4, n_channels=10, duration=0.1, fs=fs)
+    avg_time_batch = time_forward_pass(modfb, signal_batch, device=device.split(':')[0])
+    output_batch = modfb(signal_batch)
+    
+    expected_shape_batch = (4, 10, modfb.num_filters, signal_batch.shape[-1])
+    assert output_batch.shape == expected_shape_batch
+    print(f"✓ Forward batch: {signal_batch.shape} -> {output_batch.shape} ({avg_time_batch:.3f} ms avg)")
+    
+    print(f"\n{'='*80}\n")
+
+
+@pytest.mark.parametrize("device", get_available_devices())
+def test_king2019_modfb_learnable(device):
+    """Test King2019ModulationFilterbank with learnable parameters."""
+    from torch_amt.common.modulation import King2019ModulationFilterbank
+    
+    print(f"\n{'='*80}")
+    print(f"TEST: King2019ModulationFilterbank (learnable) - Device: {device.upper()}")
+    print(f"{'='*80}\n")
+    
+    fs = 16000
+    modfb = King2019ModulationFilterbank(fs=fs, mflow=2.0, mfhigh=150.0, qfactor=1.0, learnable=True)
+    modfb = modfb.to(device)
+    
+    print(f"✓ Initialization successful")
+    
+    # Count parameters
+    n_params_total = sum(p.numel() for p in modfb.parameters())
+    n_params_learnable = sum(p.numel() for p in modfb.parameters() if p.requires_grad)
+    
+    print(f"  Total parameters: {n_params_total}")
+    print(f"  Learnable parameters: {n_params_learnable}")
+    assert n_params_learnable > 0, "Should have learnable parameters"
+    
+    signal = create_test_signal(device, batch_size=2, n_channels=10, duration=0.1, fs=fs)
+    output = modfb(signal)
+    
+    print(f"✓ Forward: {signal.shape} -> {output.shape}")
+    print(f"\n{'='*80}\n")
+
+
+@pytest.mark.parametrize("device", get_available_devices())
+def test_king2019_modfb_mfc_generation(device):
+    """Test King2019ModulationFilterbank modulation center frequency generation."""
+    from torch_amt.common.modulation import King2019ModulationFilterbank
+    
+    print(f"\n{'='*80}")
+    print(f"TEST: King2019ModulationFilterbank (MFC generation) - Device: {device.upper()}")
+    print(f"{'='*80}\n")
+    
+    fs = 16000
+    modfb = King2019ModulationFilterbank(fs=fs, mflow=2.0, mfhigh=150.0, qfactor=1.0)
+    modfb = modfb.to(device)
+    
+    print(f"✓ Initialization successful")
+    print(f"  Number of MFC: {modfb.num_filters}")
+    print(f"  MFC range: [{modfb.mfc[0]:.2f}, {modfb.mfc[-1]:.2f}] Hz")
+    print(f"  MFC values: {[f'{mfc:.2f}' for mfc in modfb.mfc[:5]]}... (first 5)")
+    
+    # Verify MFC ordering
+    for i in range(len(modfb.mfc) - 1):
+        assert modfb.mfc[i] < modfb.mfc[i+1], f"MFC not monotonically increasing at index {i}"
+    
+    # Verify bounds
+    assert modfb.mfc[0] >= 2.0 - 0.1, f"First MFC ({modfb.mfc[0]:.2f}) should be close to mflow (2.0)"
+    assert modfb.mfc[-1] <= 150.0 + 0.1, f"Last MFC ({modfb.mfc[-1]:.2f}) should be close to mfhigh (150.0)"
+    
+    print(f"  Verified: MFC monotonically increasing and within bounds")
+    print(f"\n{'='*80}\n")
+
+
+@pytest.mark.parametrize("device", get_available_devices())
+def test_king2019_modfb_device_transfer(device):
+    """Test King2019ModulationFilterbank device transfer."""
+    from torch_amt.common.modulation import King2019ModulationFilterbank
+    
+    print(f"\n{'='*80}")
+    print(f"TEST: King2019ModulationFilterbank (device transfer) - Device: {device.upper()}")
+    print(f"{'='*80}\n")
+    
+    fs = 16000
+    modfb = King2019ModulationFilterbank(fs=fs, mflow=2.0, mfhigh=150.0, qfactor=1.0)
+    
+    # Transfer to target device
+    modfb = modfb.to(device)
+    
+    signal = create_test_signal(device, batch_size=2, n_channels=10, duration=0.1, fs=fs)
+    output = modfb(signal)
+    
+    assert output.device.type == device.split(':')[0]
+    
+    print(f"✓ Device transfer successful: cpu -> {device}")
+    print(f"✓ Forward: {signal.shape} -> {output.shape}")
+    print(f"\n{'='*80}\n")
+
+
+@pytest.mark.parametrize("device", get_available_devices())
+def test_king2019_modfb_batch_consistency(device):
+    """Test King2019ModulationFilterbank batch consistency."""
+    from torch_amt.common.modulation import King2019ModulationFilterbank
+    
+    print(f"\n{'='*80}")
+    print(f"TEST: King2019ModulationFilterbank (batch consistency) - Device: {device.upper()}")
+    print(f"{'='*80}\n")
+    
+    fs = 16000
+    modfb = King2019ModulationFilterbank(fs=fs, mflow=2.0, mfhigh=150.0, qfactor=1.0)
+    modfb = modfb.to(device)
+    
+    # Create batch of identical signals
+    signal_single = create_test_signal(device, batch_size=1, n_channels=10, duration=0.1, fs=fs)
+    signal_batch = signal_single.repeat(4, 1, 1)
+    
+    with torch.no_grad():
+        output_single = modfb(signal_single)
+        output_batch = modfb(signal_batch)
+    
+    # Check batch dimension
+    assert output_batch.shape[0] == 4
+    
+    # Check consistency (first batch element should match single)
+    diff = (output_batch[0] - output_single[0]).abs().max()
+    assert diff < 1e-5, f"Batch inconsistency: max diff = {diff}"
+    
+    print(f"✓ Batch processing consistent with single processing (max diff: {diff:.2e})")
+    print(f"\n{'='*80}\n")
+
+
+# ================================================================================================
+# Test: FastKing2019ModulationFilterbank - Default Parameters
+# ================================================================================================
+
+@pytest.mark.parametrize("device", get_available_devices())
+@pytest.mark.parametrize("learnable", [False, True])
+def test_fast_king2019_modfb_default(device, learnable):
+    """Test FastKing2019ModulationFilterbank with default parameters on specified device."""
+    from torch_amt.common.modulation import FastKing2019ModulationFilterbank
+    
+    print(f"\n{'='*80}")
+    print(f"TEST: FastKing2019ModulationFilterbank (default) - Device: {device.upper()}, Learnable: {learnable}")
+    print(f"{'='*80}\n")
+    
+    # Initialization with default parameters
+    fs = 16000
+    modfb = FastKing2019ModulationFilterbank(fs=fs, mflow=2.0, mfhigh=150.0, qfactor=1.0, learnable=learnable)
+    modfb = modfb.to(device)
+    
+    print(f"✓ Initialization successful")
+    print(f"  Module: {modfb}")
+    
+    # Check parameters
+    n_params = sum(p.numel() for p in modfb.parameters())
+    param_names = [name for name, _ in modfb.named_parameters()]
+    print(f"  Parameters: {n_params} total")
+    if learnable:
+        print(f"  Learnable param names (first 3): {param_names[:3] if len(param_names) >= 3 else param_names}")
+    
+    # Verify attributes (inherited from King2019ModulationFilterbank)
+    assert modfb.fs == fs
+    print(f"  Number of modulation filters: {modfb.num_filters}")
+    print(f"  MFC range: [{modfb.mfc[0]:.2f}, {modfb.mfc[-1]:.2f}] Hz")
+    
+    # Forward pass - single
+    signal_single = create_test_signal(device, batch_size=1, n_channels=10, duration=0.1, fs=fs)
+    print(f"  Input device: {signal_single.device}")
+    
+    avg_time_single = time_forward_pass(modfb, signal_single, device=device.split(':')[0])
+    output_single = modfb(signal_single)
+    
+    # Output shape: (B, C, M, T)
+    expected_shape = (1, 10, modfb.num_filters, signal_single.shape[-1])
+    assert output_single.shape == expected_shape, f"Expected {expected_shape}, got {output_single.shape}"
+    print(f"✓ Forward single: {signal_single.shape} -> {output_single.shape} ({avg_time_single:.3f} ms avg)")
+    
+    # Forward pass - batch
+    signal_batch = create_test_signal(device, batch_size=4, n_channels=10, duration=0.1, fs=fs)
+    avg_time_batch = time_forward_pass(modfb, signal_batch, device=device.split(':')[0])
+    output_batch = modfb(signal_batch)
+    
+    expected_shape_batch = (4, 10, modfb.num_filters, signal_batch.shape[-1])
+    assert output_batch.shape == expected_shape_batch
+    print(f"✓ Forward batch: {signal_batch.shape} -> {output_batch.shape} ({avg_time_batch:.3f} ms avg)")
+    
+    print(f"\n{'='*80}\n")
+
+
+@pytest.mark.parametrize("device", get_available_devices())
+def test_fast_king2019_modfb_learnable(device):
+    """Test FastKing2019ModulationFilterbank with learnable parameters."""
+    from torch_amt.common.modulation import FastKing2019ModulationFilterbank
+    
+    print(f"\n{'='*80}")
+    print(f"TEST: FastKing2019ModulationFilterbank (learnable) - Device: {device.upper()}")
+    print(f"{'='*80}\n")
+    
+    fs = 16000
+    modfb = FastKing2019ModulationFilterbank(fs=fs, mflow=2.0, mfhigh=150.0, qfactor=1.0, learnable=True)
+    modfb = modfb.to(device)
+    
+    print(f"✓ Initialization successful")
+    
+    # Count parameters
+    n_params_total = sum(p.numel() for p in modfb.parameters())
+    n_params_learnable = sum(p.numel() for p in modfb.parameters() if p.requires_grad)
+    
+    print(f"  Total parameters: {n_params_total}")
+    print(f"  Learnable parameters: {n_params_learnable}")
+    assert n_params_learnable > 0, "Should have learnable parameters"
+    
+    signal = create_test_signal(device, batch_size=2, n_channels=10, duration=0.1, fs=fs)
+    output = modfb(signal)
+    
+    print(f"✓ Forward: {signal.shape} -> {output.shape}")
+    print(f"\n{'='*80}\n")
+
+
+@pytest.mark.parametrize("device", get_available_devices())
+def test_fast_king2019_modfb_mfc_generation(device):
+    """Test FastKing2019ModulationFilterbank modulation center frequency generation."""
+    from torch_amt.common.modulation import FastKing2019ModulationFilterbank
+    
+    print(f"\n{'='*80}")
+    print(f"TEST: FastKing2019ModulationFilterbank (MFC generation) - Device: {device.upper()}")
+    print(f"{'='*80}\n")
+    
+    fs = 16000
+    modfb = FastKing2019ModulationFilterbank(fs=fs, mflow=2.0, mfhigh=150.0, qfactor=1.0)
+    modfb = modfb.to(device)
+    
+    print(f"✓ Initialization successful")
+    print(f"  Number of MFC: {modfb.num_filters}")
+    print(f"  MFC range: [{modfb.mfc[0]:.2f}, {modfb.mfc[-1]:.2f}] Hz")
+    print(f"  MFC values: {[f'{mfc:.2f}' for mfc in modfb.mfc[:5]]}... (first 5)")
+    
+    # Verify MFC ordering
+    for i in range(len(modfb.mfc) - 1):
+        assert modfb.mfc[i] < modfb.mfc[i+1], f"MFC not monotonically increasing at index {i}"
+    
+    # Verify bounds
+    assert modfb.mfc[0] >= 2.0 - 0.1, f"First MFC ({modfb.mfc[0]:.2f}) should be close to mflow (2.0)"
+    assert modfb.mfc[-1] <= 150.0 + 0.1, f"Last MFC ({modfb.mfc[-1]:.2f}) should be close to mfhigh (150.0)"
+    
+    print(f"  Verified: MFC monotonically increasing and within bounds")
+    print(f"\n{'='*80}\n")
+
+
+@pytest.mark.parametrize("device", get_available_devices())
+def test_fast_king2019_modfb_device_transfer(device):
+    """Test FastKing2019ModulationFilterbank device transfer."""
+    from torch_amt.common.modulation import FastKing2019ModulationFilterbank
+    
+    print(f"\n{'='*80}")
+    print(f"TEST: FastKing2019ModulationFilterbank (device transfer) - Device: {device.upper()}")
+    print(f"{'='*80}\n")
+    
+    fs = 16000
+    modfb = FastKing2019ModulationFilterbank(fs=fs, mflow=2.0, mfhigh=150.0, qfactor=1.0)
+    
+    # Transfer to target device
+    modfb = modfb.to(device)
+    
+    signal = create_test_signal(device, batch_size=2, n_channels=10, duration=0.1, fs=fs)
+    output = modfb(signal)
+    
+    assert output.device.type == device.split(':')[0]
+    
+    print(f"✓ Device transfer successful: cpu -> {device}")
+    print(f"✓ Forward: {signal.shape} -> {output.shape}")
+    print(f"\n{'='*80}\n")
+
+
+@pytest.mark.parametrize("device", get_available_devices())
+def test_fast_king2019_modfb_batch_consistency(device):
+    """Test FastKing2019ModulationFilterbank batch consistency."""
+    from torch_amt.common.modulation import FastKing2019ModulationFilterbank
+    
+    print(f"\n{'='*80}")
+    print(f"TEST: FastKing2019ModulationFilterbank (batch consistency) - Device: {device.upper()}")
+    print(f"{'='*80}\n")
+    
+    fs = 16000
+    modfb = FastKing2019ModulationFilterbank(fs=fs, mflow=2.0, mfhigh=150.0, qfactor=1.0)
+    modfb = modfb.to(device)
+    
+    # Create batch of identical signals
+    signal_single = create_test_signal(device, batch_size=1, n_channels=10, duration=0.1, fs=fs)
+    signal_batch = signal_single.repeat(4, 1, 1)
+    
+    with torch.no_grad():
+        output_single = modfb(signal_single)
+        output_batch = modfb(signal_batch)
+    
+    # Check batch dimension
+    assert output_batch.shape[0] == 4
+    
+    # Check consistency (first batch element should match single)
+    diff = (output_batch[0] - output_single[0]).abs().max()
+    assert diff < 1e-5, f"Batch inconsistency: max diff = {diff}"
+    
+    print(f"✓ Batch processing consistent with single processing (max diff: {diff:.2e})")
+    print(f"\n{'='*80}\n")
+
+
+# ================================================================================================
 # Main Execution
 # ================================================================================================
 
@@ -620,6 +1264,13 @@ if __name__ == "__main__":
         print(f"{'='*80}\n")
         
         try:
+            # ========================================================================
+            # ModulationFilterbank Tests
+            # ========================================================================
+            print("\n" + "=" * 80)
+            print("MODULATIONFILTERBANK TESTS")
+            print("=" * 80 + "\n")
+            
             # Test 1: Default parameters
             print("Test 1/9: Default parameters (learnable=False)")
             test_modfb_default(device, learnable=False)
@@ -659,6 +1310,113 @@ if __name__ == "__main__":
             
             # Test 9: Batch consistency
             test_modfb_batch_consistency(device)
+            
+            # ========================================================================
+            # FastModulationFilterbank Tests
+            # ========================================================================
+            print("\n" + "=" * 80)
+            print("FASTMODULATIONFILTERBANK TESTS")
+            print("=" * 80 + "\n")
+            
+            # Test 1: Default parameters
+            print("Test 1/9: Default parameters (learnable=False)")
+            test_fast_modfb_default(device, learnable=False)
+            
+            print("Test 2/9: Default parameters (learnable=True)")
+            test_fast_modfb_default(device, learnable=True)
+            
+            # Test 2: dau1997 preset
+            print("Test 3/9: dau1997 preset")
+            test_fast_modfb_dau1997(device)
+            
+            # Test 3: jepsen2008 preset
+            print("Test 4/9: jepsen2008 preset")
+            test_fast_modfb_jepsen2008(device)
+            
+            # Test 4: paulick2024 preset
+            print("Test 5/9: paulick2024 preset")
+            test_fast_modfb_paulick2024(device)
+            
+            # Test 5: Filter types
+            print("Test 6/9: Filter types (efilt)")
+            test_fast_modfb_filter_types(device, filter_type='efilt')
+            
+            print("Test 7/9: Filter types (butterworth)")
+            test_fast_modfb_filter_types(device, filter_type='butterworth')
+            
+            # Test 6: Learnable parameters
+            print("Test 8/9: Learnable parameters")
+            test_fast_modfb_learnable(device)
+            
+            # Test 7: MFC generation
+            print("Test 9/9: MFC generation")
+            test_fast_modfb_mfc_generation(device)
+            
+            # Test 8: Device transfer
+            test_fast_modfb_device_transfer(device)
+            
+            # Test 9: Batch consistency
+            test_fast_modfb_batch_consistency(device)
+            
+            # ========================================================================
+            # King2019ModulationFilterbank Tests
+            # ========================================================================
+            print("\n" + "=" * 80)
+            print("KING2019MODULATIONFILTERBANK TESTS")
+            print("=" * 80 + "\n")
+            
+            # Test 1: Default parameters
+            print("Test 1/6: Default parameters (learnable=False)")
+            test_king2019_modfb_default(device, learnable=False)
+            
+            print("Test 2/6: Default parameters (learnable=True)")
+            test_king2019_modfb_default(device, learnable=True)
+            
+            # Test 2: Learnable parameters
+            print("Test 3/6: Learnable parameters")
+            test_king2019_modfb_learnable(device)
+            
+            # Test 3: MFC generation
+            print("Test 4/6: MFC generation")
+            test_king2019_modfb_mfc_generation(device)
+            
+            # Test 4: Device transfer
+            print("Test 5/6: Device transfer")
+            test_king2019_modfb_device_transfer(device)
+            
+            # Test 5: Batch consistency
+            print("Test 6/6: Batch consistency")
+            test_king2019_modfb_batch_consistency(device)
+            
+            # ========================================================================
+            # FastKing2019ModulationFilterbank Tests
+            # ========================================================================
+            print("\n" + "=" * 80)
+            print("FASTKING2019MODULATIONFILTERBANK TESTS")
+            print("=" * 80 + "\n")
+            
+            # Test 1: Default parameters
+            print("Test 1/6: Default parameters (learnable=False)")
+            test_fast_king2019_modfb_default(device, learnable=False)
+            
+            print("Test 2/6: Default parameters (learnable=True)")
+            test_fast_king2019_modfb_default(device, learnable=True)
+            
+            # Test 2: Learnable parameters
+            print("Test 3/6: Learnable parameters")
+            test_fast_king2019_modfb_learnable(device)
+            
+            # Test 3: MFC generation
+            print("Test 4/6: MFC generation")
+            test_fast_king2019_modfb_mfc_generation(device)
+            
+            # Test 4: Device transfer
+            print("Test 5/6: Device transfer")
+            test_fast_king2019_modfb_device_transfer(device)
+            
+            # Test 5: Batch consistency
+            print("Test 6/6: Batch consistency")
+            test_fast_king2019_modfb_batch_consistency(device)
             
             print(f"\n{'='*80}")
             print(f"✓ ALL TESTS PASSED ON {device.upper()}")

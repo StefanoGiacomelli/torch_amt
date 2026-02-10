@@ -1,4 +1,4 @@
-# 🔊 torch_amt - PyTorch Auditory Modeling Toolbox
+# torch_amt - PyTorch Auditory Modeling Toolbox
 
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0) [![Python 3.14+](https://img.shields.io/badge/python-3.14+-blue.svg)](https://www.python.org/downloads/) [![PyTorch 2.0+](https://img.shields.io/badge/PyTorch-2.0+-ee4c2c.svg)](https://pytorch.org/) [![PyPI version](https://badge.fury.io/py/torch-amt.svg)](https://badge.fury.io/py/torch-amt) [![Documentation Status](https://readthedocs.org/projects/torch-amt/badge/?version=latest)](https://torch-amt.readthedocs.io/)
 
@@ -6,7 +6,7 @@
   <img src="dev/AMT_front_image.png" alt="torch_amt - PyTorch Auditory Modeling Toolbox" width="800">
 </p>
 
-**Differentiable, GPU-accelerated PyTorch implementations of computational auditory models from the Auditory Modeling Toolbox (AMT).**
+**Differentiable, GPU-accelerated PyTorch implementations of Computational Auditory models from the MATLAB Auditory Modeling Toolbox (AMT).**
 
 Built for researchers in psychoacoustics, computational neuroscience, and Audio Deep Learning who need:
 
@@ -178,9 +178,7 @@ TODO: Placeholder table w. Components runtime analysis forward over 10 runs, and
 
 ## 📄 License
 
-This project is aligned to the original AMT license, hence licensed under the **GNU General Public License v3.0 or later (GPLv3+)**.
-
-See [LICENSE](LICENSE) for full details.
+This project is aligned to the original AMT license, hence licensed under the **GNU General Public License v3.0 or later (GPLv3+)**. See [LICENSE](LICENSE) for full details.
 
 ---
 
@@ -193,21 +191,31 @@ This work is based on the **Auditory Modeling Toolbox (AMT)** developed by:
 - Robert Baumgartner
 - ...and many contributors from the auditory research community
 
-**Primary Reference:**
+**Reference:**
 > Majdak, P., Hollomey, C., & Baumgartner, R. (2022). "AMT 1.x: A toolbox for reproducible research in auditory modeling." *Acta Acustica*, 6, 19. https://doi.org/10.1051/aacus/2022011
 
-Individual model implementations are based on their respective publications (see model docstrings for specific citations).
-
 **Official Site:** https://amtoolbox.org/
+
+Individual model implementations are based on their respective publications (see docstrings for specific citations).
 
 ---
 
 ## Contacts
 
-**Author:** Stefano Giacomelli  
-**Affiliation:** Ph.D. Candidate @ DISIM Department, University of L'Aquila  
-**Email:** stefano.giacomelli@graduate.univaq.it
-**ORCID:** https://orcid.org/0009-0009-0438-1748
+**Stefano Giacomelli**  
+ICT - Ph.D. Candidate  
+Department of Engineering, Information Science & Mathematics (DISIM dpt.)
+University of L'Aquila, Italy
+
+![DISIM_logo](https://phdict.disim.univaq.it/wp-content/uploads/2024/06/logo-univaq-disim-2-2-768x283.png){width="400" height="150"}
+
+📧 Email: stefano.giacomelli@graduate.univaq.it  
+🔗 GitHub: https://github.com/StefanoGiacomelli 
+🆔 ORCID: https://orcid.org/0009-0009-0438-1748 
+🎓 Scholar: https://scholar.google.com/citations?user=l-n0hl4AAAAJ&hl=it  
+💼 LinkedIn: https://www.linkedin.com/in/stefano-giacomelli-811654135
+
+*This project is funded under the Italian National Ministry of University and Research, for the Italian National Recovery and Resilience Plan (NRRP) "Methods of Computational Auditory Scene Analysis and Synthesis supporting eXtended and Immersive Reality Services"*
 
 ---
 
